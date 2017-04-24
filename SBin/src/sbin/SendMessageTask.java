@@ -28,7 +28,7 @@ public class SendMessageTask extends Task<Void> {
  
     @Override 
     protected Void call() throws Exception { 
-            try (Socket socket = new Socket("localhost", SBin.PORT);
+            try (Socket socket = new Socket("localhost", SBin.PORToutput);
                 OutputStream output = socket.getOutputStream();
                 BufferedInputStream input = new BufferedInputStream(new ByteArrayInputStream(instruction)) {}) {
             byte[] buffer = new byte[4096]; //bufor 4KB
