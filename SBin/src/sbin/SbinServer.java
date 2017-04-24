@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
@@ -24,13 +23,13 @@ public class SbinServer implements Runnable{
 
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(SBin.PORT)) {
+        try (ServerSocket serverSocket = new ServerSocket(SBin.PORTinput)) {
             ExecutorService executor = Executors.newFixedThreadPool(4);
             while (true) {
                 try {
                     Socket socket = serverSocket.accept();
                     if (socket != null){
-                        System.out.println("msg");
+                        System.out.println("received msg");
                         ReceiveMessageTask receive = 
                                 new ReceiveMessageTask(socket, new File("D:\\received\\aaa.txt"));
                         executor.submit(receive);

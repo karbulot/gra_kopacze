@@ -28,6 +28,7 @@ public class TranslateMessageTask {
 
     
      public void Translate() throws FileNotFoundException {
+        System.out.println("TranslateMessageTask start");
         String message = new String();
         message = "ok";
         try (PrintWriter output = new PrintWriter(logs)) {
