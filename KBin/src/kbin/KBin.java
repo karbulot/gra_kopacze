@@ -41,16 +41,15 @@ public class KBin {
                     }catch (Exception e){
                         System.out.println("error k2");
                     }
-                } else{
-                    if ("w".equals(text)){
-                        System.out.println("sending k2");
-                        SendMessageTask task = new SendMessageTask(k2);
-                        try{
-                            task.call();
-                        }catch (Exception e){
-                            System.out.println("error k2");
-                        }  
-                    }
+                } else if ("w".equals(text)){
+                    System.out.println("sending k2");
+                    SendMessageTask task = new SendMessageTask(k2);
+                    try{
+                        task.call();
+                    }catch (Exception e){
+                        System.out.println("error k2");
+                    }  
+                
                 }
                 
                 Thread.sleep(3000);

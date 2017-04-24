@@ -31,10 +31,14 @@ public class SbinServer implements Runnable{
                     if (socket != null){
                         System.out.println("received msg");
                         ReceiveMessageTask receive = 
-                                new ReceiveMessageTask(socket, new File("D:\\received\\aaa.txt"));
-                        executor.submit(receive);
-                    } else {
-                    }
+                                new ReceiveMessageTask(socket);
+                        
+                        /* jeden watek */
+                        try {
+                            receive.call();
+                        } catch (Exception e){}
+                        
+                    } 
                 } catch(SocketTimeoutException ex){}
             }
         } catch (IOException ex) {
