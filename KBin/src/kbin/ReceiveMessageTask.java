@@ -23,18 +23,26 @@ import javafx.concurrent.Task;
 public class ReceiveMessageTask extends Task<Void> {
     Socket socket;
     File file;
+    KbinServer server;
  
     public ReceiveMessageTask(Socket socket, File file) {
         this.socket = socket;
         this.file = file;
     }  
+    
+    public ReceiveMessageTask(Socket socket, KbinServer server)
+    {
+        this.socket = socket;
+        this.file = null;
+        this.server = server;
+    }
 
     @Override
     protected Void call() throws Exception {
         System.out.println("ReceiveMessageTask start");
         try (DataInputStream input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-        byte[] buffer = new byte[4096]; //bufor 4KB
+        byte[] buffer = new byte[4]; //bufor 4B
         int readSize;
         while ((readSize = input.read(buffer)) != -1) {            
                 for (int i = 0; i < readSize; i++){

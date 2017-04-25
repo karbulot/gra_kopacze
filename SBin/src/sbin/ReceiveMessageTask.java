@@ -22,10 +22,13 @@ import javafx.concurrent.Task;
  */
 public class ReceiveMessageTask extends Task<Void> {
     Socket socket;
+    SbinServer server;
+    
  
-    public ReceiveMessageTask(Socket socket) {
+    public ReceiveMessageTask(Socket socket, SbinServer server) {
         System.out.println("ReceiveMessageTask create");
         this.socket = socket;
+        this.server = server;
     }
  
     @Override 
@@ -39,14 +42,9 @@ public class ReceiveMessageTask extends Task<Void> {
                     output.write(buffer, 0, readSize);
                 }
             System.out.println("start translate msg");
-            TranslateMessageTask translate = 
-                    new TranslateMessageTask(output.toByteArray(), new File("./log.txt"));
-            try {
-                translate.Translate();
-            } catch (FileNotFoundException e){
-                System.out.println("file not found");
-            }
-            
+            TranslateMessageTask translator = 
+                    new TranslateMessageTask(output.toByteArray(), server);
+            translator.call();
             System.out.println("ReceiveMessageTask done");
 
 

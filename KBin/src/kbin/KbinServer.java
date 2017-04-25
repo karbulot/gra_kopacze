@@ -31,7 +31,7 @@ public class KbinServer implements Runnable{
                     if (socket != null){
                         System.out.println("serverSocket accept");
                         ReceiveMessageTask receive = 
-                                new ReceiveMessageTask(socket, new File("./received/aaa.txt"));
+                                new ReceiveMessageTask(socket, this);
                         executor.submit(receive);
                     } else {
                     }

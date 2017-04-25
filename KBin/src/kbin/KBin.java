@@ -22,40 +22,35 @@ public class KBin {
      */
     public static void main(String[] args) {
         System.out.println("Serwer Start");
-        Thread server = new Thread(new KbinServer());
+        KbinServer kbinServer = new KbinServer();
+        Thread server = new Thread(kbinServer);
         server.start();
         
         System.out.println("Sending start");
-        byte[] k1 = {1,1,1,1};
-        byte[] k2 = {0,0,0,0};
+        byte[] imHere = {1,1,1,1};
+        byte[] dontLet = {0,0,0,0};
         Scanner input = new Scanner(System.in);
         String text;
-        try { 
-            while (true){
-                text = input.nextLine();
-                if ("q".equals(text)){
-                    System.out.println("sending k1");
-                    SendMessageTask task = new SendMessageTask(k1);
-                    try{
-                        task.call();
-                    }catch (Exception e){
-                        System.out.println("error k2");
-                    }
-                } else if ("w".equals(text)){
-                    System.out.println("sending k2");
-                    SendMessageTask task = new SendMessageTask(k2);
-                    try{
-                        task.call();
-                    }catch (Exception e){
-                        System.out.println("error k2");
-                    }  
-                
+        while (true){
+            text = input.nextLine();
+            if ("q".equals(text)){
+                System.out.println("sending xD");
+                SendMessageTask task = new SendMessageTask(imHere, kbinServer);
+                try{
+                    task.call();
+                }catch (Exception e){
+                    System.out.println("error xD");  
                 }
-                
-                Thread.sleep(3000);
+            } else if ("w".equals(text)){
+                System.out.println("sending dd");
+                SendMessageTask task = new SendMessageTask(dontLet, kbinServer);
+                try{
+                    task.call();
+                }catch (Exception e){
+                    System.out.println("error dd");
+                }
             }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(KBin.class.getName()).log(Level.SEVERE, null, ex);
+            //Thread.sleep(3000);
         }
     }
     

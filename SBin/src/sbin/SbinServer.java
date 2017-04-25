@@ -5,7 +5,6 @@
  */
 package sbin;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,7 +19,18 @@ import java.util.logging.Logger;
  * @author Archax
  */
 public class SbinServer implements Runnable{
-
+    int players;
+    
+    public SbinServer()
+    {
+        players = 0;
+    }
+    
+    public void addPlayer()
+    {
+        players++;
+    }
+    
     @Override
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(SBin.PORTinput)) {
@@ -31,14 +41,17 @@ public class SbinServer implements Runnable{
                     if (socket != null){
                         System.out.println("received msg");
                         ReceiveMessageTask receive = 
-                                new ReceiveMessageTask(socket);
+                                new ReceiveMessageTask(socket, this);
                         
                         /* jeden watek */
-                        try {
+                        try{
                             receive.call();
                         } catch (Exception e){}
                         
-                    } 
+                        /*   */
+                        
+                    } else {
+                    }
                 } catch(SocketTimeoutException ex){}
             }
         } catch (IOException ex) {

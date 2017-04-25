@@ -31,7 +31,7 @@ public class SendMessageTask extends Task<Void> {
             try (Socket socket = new Socket("localhost", SBin.PORToutput);
                 OutputStream output = socket.getOutputStream();
                 BufferedInputStream input = new BufferedInputStream(new ByteArrayInputStream(instruction)) {}) {
-            byte[] buffer = new byte[4096]; //bufor 4KB
+            byte[] buffer = new byte[4]; //bufor 4B
             int readSize;
             while ((readSize = input.read(buffer)) != -1) {
                 output.write(buffer, 0, readSize);
