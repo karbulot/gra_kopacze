@@ -19,9 +19,9 @@ public class KBin {
     public static int PORTinput = 1258;
     /**
      * @param args the command line arguments
-     */
+     *//*
     public static void main(String[] args) {
-        /*System.out.println("Serwer Start");
+        System.out.println("Serwer Start");
         KbinServer kbinServer = new KbinServer();
         Thread server = new Thread(kbinServer);
         server.start();
@@ -53,6 +53,6 @@ public class KBin {
             //Thread.sleep(3000);
         }
     }
-    */
-    }
+    
+    }*/
 }

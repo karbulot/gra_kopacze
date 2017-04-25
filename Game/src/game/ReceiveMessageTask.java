@@ -43,10 +43,9 @@ public class ReceiveMessageTask extends Task<Void> {
         ByteArrayOutputStream output = new ByteArrayOutputStream()) {
         byte[] buffer = new byte[4]; //bufor 4B
         int readSize;
-        while ((readSize = input.read(buffer)) != -1) {            
-                for (int i = 0; i < readSize; i++){
-                    System.out.print(Arrays.toString(buffer));
-                }               
+        while ((readSize = input.read(buffer)) != -1) {     
+                System.out.print(Arrays.toString(buffer));
+                              
                 output.write(buffer, 0, readSize);
             } 
             TranslateMessageTask translator = new TranslateMessageTask(output.toByteArray(), server);

@@ -6,6 +6,7 @@
 package sbin;
 
 import java.io.File;
+import java.util.Arrays;
 import javafx.concurrent.Task;
 
 /**
@@ -35,11 +36,15 @@ public class TranslateMessageTask extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        if (instruction[0] == 1)
+        if (instruction[0] == 0)
         {
-            new SendMessageTask(new byte[] {1, 1, 1, 1}).call();
+            System.out.println("nowy gracz");
+            byte[] message = {0, 1, 1, 1};
+            server.addPlayer();
+            message[0] = server.getPlayers();
+            new SendMessageTask(message).call();
         }
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
      
 }

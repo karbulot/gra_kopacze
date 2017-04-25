@@ -5,6 +5,8 @@
  */
 package game;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,20 +17,34 @@ import java.util.logging.Logger;
 public class Game extends javax.swing.JFrame {
     
     byte playerNumber;
+    List<Character> players = new ArrayList<Character>();
+    KbinServer kbinServer;
     /**
      * Creates new form Game
      */
     public Game() {
+        this.kbinServer = null;
         this.playerNumber = 0;
-        GameObject map = new Map();
         initComponents();
     }
     
     public void setPlayerNumber(byte playerNumber)
     {
         this.playerNumber = playerNumber;
+        int x = 50;
+        int y = 30;
+        for(int i = 0; i < playerNumber; i++)
+        {
+            Character player = new Character(x, y);
+            players.add(player);
+            y += 70;
+            player.draw(jPanel1);
+        }
     }
-    
+    public void addPlayer()    
+    {
+        players.add(new Character());
+    }
     public byte getPlayerNumber()
     {
         return playerNumber;
@@ -49,6 +65,11 @@ public class Game extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1.setText("Kop");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -92,10 +113,13 @@ public class Game extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        KbinServer kbinServer = new KbinServer(this);
-        Thread Client = new Thread(kbinServer);
-        Client.start();
-        byte[] imHere = {0};
+        if (kbinServer == null)
+        {
+            kbinServer = new KbinServer(this);
+            Thread Client = new Thread(kbinServer);
+            Client.start();
+        }
+        byte[] imHere = {playerNumber};
         SendMessageTask task = new SendMessageTask(imHere, kbinServer);
         Map map = new Map();
         map.draw(jPanel1);
@@ -105,6 +129,13 @@ public class Game extends javax.swing.JFrame {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        for(Character player : players)
+        {
+            player.draw(jPanel1);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments

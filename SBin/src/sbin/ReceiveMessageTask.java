@@ -36,7 +36,7 @@ public class ReceiveMessageTask extends Task<Void> {
         System.out.println("ReceiveMessageTask start");
         try (DataInputStream input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             ByteArrayOutputStream output = new ByteArrayOutputStream()) {
-            byte[] buffer = new byte[4]; //bufor 4KB
+            byte[] buffer = new byte[4]; //bufor 4B
             int readSize;
             while ((readSize = input.read(buffer)) != -1) {
                     output.write(buffer, 0, readSize);
