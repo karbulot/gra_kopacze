@@ -6,8 +6,7 @@
 package sbin;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import javafx.concurrent.Task;
 
 /**
  *
@@ -15,25 +14,32 @@ import java.io.PrintWriter;
  * 
  * który ostatecznie, na razie nawet nie jest taskiem
  */
-public class TranslateMessageTask {
+public class TranslateMessageTask extends Task<Void> {
     
-    private final byte[] instruction;
+    private byte[] instruction;
     private final File logs;
+    SbinServer server;
     
     public TranslateMessageTask(byte[] instruction, File file){
         this.logs = file;
         this.instruction = new byte[instruction.length];
         System.arraycopy(instruction, 0, this.instruction, 0, instruction.length);
     }
-
     
-     public void Translate() throws FileNotFoundException {
-        String message = new String();
-        message = "ok";
-        try (PrintWriter output = new PrintWriter(logs)) {
-            output.print(message);
-        }
+    public TranslateMessageTask(byte[] instruction, SbinServer server){
+        this.instruction = new byte[instruction.length];
+        System.arraycopy(instruction, 0, this.instruction, 0, instruction.length);
+        this.logs = null;
+        this.server = server;
     }
-    
-    
+
+    @Override
+    protected Void call() throws Exception {
+        if (instruction[0] == 1)
+        {
+            new SendMessageTask(new byte[] {1, 1, 1, 1}).call();
+        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+     
 }

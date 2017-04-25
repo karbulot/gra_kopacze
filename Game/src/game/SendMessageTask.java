@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sbin;
+package game;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -20,15 +20,18 @@ import javafx.concurrent.Task;
  */
 public class SendMessageTask extends Task<Void> {
     byte[] instruction; //rozkaz do przesłania
- 
-    public SendMessageTask(byte[] instruction) { 
+    KbinServer server;
+    
+    public SendMessageTask(byte[] instruction, KbinServer server) { 
         this.instruction = new byte[instruction.length];
         System.arraycopy(instruction, 0, this.instruction, 0, instruction.length);
+        this.server = server;
     }
  
     @Override 
     protected Void call() throws Exception { 
-            try (Socket socket = new Socket("localhost", SBin.PORToutput);
+            System.out.println("SendMessageTask start");
+            try (Socket socket = new Socket("localhost", KBin.PORToutput);
                 OutputStream output = socket.getOutputStream();
                 BufferedInputStream input = new BufferedInputStream(new ByteArrayInputStream(instruction)) {}) {
             byte[] buffer = new byte[4]; //bufor 4B
@@ -36,6 +39,7 @@ public class SendMessageTask extends Task<Void> {
             while ((readSize = input.read(buffer)) != -1) {
                 output.write(buffer, 0, readSize);
             }
+            System.out.println("SendMessageTask done");
         } catch (IOException e){
             Logger.getLogger(SendMessageTask.class.getName()).log(Level.WARNING, e.getMessage(), e);   
         }

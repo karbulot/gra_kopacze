@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sbin;
+package kbin;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -18,45 +19,26 @@ import java.util.logging.Logger;
  *
  * @author Archax
  */
-public class SbinServer implements Runnable{
-    int players;
-    
-    public SbinServer()
-    {
-        players = 0;
-    }
-    
-    public void addPlayer()
-    {
-        players++;
-    }
+public class KbinServer implements Runnable{
     
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(SBin.PORTinput)) {
+        try (ServerSocket serverSocket = new ServerSocket(KBin.PORTinput)) {
             ExecutorService executor = Executors.newFixedThreadPool(4);
             while (true) {
                 try {
                     Socket socket = serverSocket.accept();
                     if (socket != null){
-                        System.out.println("received msg");
+                        System.out.println("serverSocket accept");
                         ReceiveMessageTask receive = 
                                 new ReceiveMessageTask(socket, this);
-                        
-                        /* jeden watek */
-                        try{
-                            receive.call();
-                        } catch (Exception e){}
-                        
-                        /*   */
-                        
+                        executor.submit(receive);
                     } else {
                     }
                 } catch(SocketTimeoutException ex){}
             }
         } catch (IOException ex) {
-            Logger.getLogger(SbinServer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KbinServer.class.getName()).log(Level.SEVERE, null, ex);
         }     
     }
-    
 }
