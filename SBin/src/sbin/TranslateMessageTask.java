@@ -25,11 +25,18 @@ public class TranslateMessageTask {
         this.instruction = new byte[instruction.length];
         System.arraycopy(instruction, 0, this.instruction, 0, instruction.length);
     }
+<<<<<<< Updated upstream
 
     
      public void Translate() throws FileNotFoundException {
         String message = new String();
         message = "ok";
+=======
+    
+     public void Translate() throws FileNotFoundException {
+        System.out.println("TranslateMessageTask start");
+        String message = "ok";
+>>>>>>> Stashed changes
         try (PrintWriter output = new PrintWriter(logs)) {
             output.print(message);
         }
