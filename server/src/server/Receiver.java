@@ -47,7 +47,7 @@ class Receiver implements Runnable
             }
             server.addUser(receivePacket);
         }
-        System.out.println("dodano uzytkownika");
+        System.out.println("Luta Krzysiek dwa pedały");
         while(true)
         {
             DatagramPacket receivePacket = 
@@ -57,6 +57,7 @@ class Receiver implements Runnable
             } catch (IOException ex) {
                 Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
+            System.out.println("cały semestr sie ruchaly");
             server.translateData(receiveData[0]);
         }
     }

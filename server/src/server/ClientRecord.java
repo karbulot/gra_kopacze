@@ -21,7 +21,7 @@ public class ClientRecord {
         this.port = port;
         this.iP = iP;
         state = new byte[1];
-        state[0] = 127;
+        state[0] = 0;
     }
     
     public byte[] getState()

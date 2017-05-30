@@ -24,8 +24,8 @@ public class BusinessLogicUnit implements Runnable{
     public BusinessLogicUnit(Server server)
     {
         this.server = server;
-        oldData = 127;
-        data = 127;
+        oldData = 0;
+        data = 0;
     }
     
     public void setData(byte data)

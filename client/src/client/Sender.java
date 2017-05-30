@@ -27,7 +27,7 @@ public class Sender implements Runnable{
         this.clientSocket = clientSocket;
         this.client = client;
         data = new byte[1];
-        data[0] = 127;
+        data[0] = -1;
         try {
             this.IPAddress = InetAddress.getLocalHost();
         } catch (UnknownHostException ex) {
