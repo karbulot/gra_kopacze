@@ -18,40 +18,42 @@ import java.util.logging.Logger;
 public class BusinessLogicUnit implements Runnable{
     
     Server server;
-    byte oldData;
     byte data;
     
     public BusinessLogicUnit(Server server)
     {
         this.server = server;
-        oldData = 0;
         data = 0;
     }
     
     public void setData(byte data)
     {
         this.data = data;
+        //System.out.println(data);
     }
     
-    public void addUser(DatagramPacket packet)
+    public synchronized void addUser(InetAddress address)
     {
-        InetAddress address = packet.getAddress();
-        int port = packet.getPort();
-        server.clients.add(new ClientRecord(port, address));
+        byte f = 0;
+        for (ClientRecord c : server.clients)
+        {
+            if (c.getIP().equals(address))
+            {
+                f = 1;
+            }
+        }
+        if (f == 0)
+        {
+            server.clients.add(new ClientRecord(server.PORT, address));
+            System.out.println("Dodano użytkownika o adresie: "+address);
+        }
     }
     
     @Override
     public void run() {
         while(true){
-            if(oldData != data)
-            {
-                oldData = data;
-                server.clients.get(0).setData(data);
-                System.out.println(data);
-            }
-            System.out.println(oldData + " " + data);
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.MILLISECONDS.sleep(100);
             } catch (InterruptedException ex) {
                 Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
             }

@@ -15,20 +15,16 @@ import java.util.Scanner;
 public class BusinessLogicUnit implements Runnable{
     
     Client client;
-    byte[] lastCommand = null;
-    byte[] presentCommand = null;
+    byte data;
     
     public BusinessLogicUnit(Client client)
     {
         this.client = client;
     }
     
-    public void translate(byte[] command)
+    public void setData(byte data)
     {
-        if (!Arrays.equals(lastCommand, command))
-        {
-            
-        }
+        this.data = data;
     }
     
      public byte[] fill(byte[] a2)

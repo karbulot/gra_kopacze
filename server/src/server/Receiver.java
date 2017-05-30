@@ -16,6 +16,7 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -24,19 +25,23 @@ class Receiver implements Runnable
     DatagramSocket serverSocket;
     byte clientsNumber;
     Server server;
+    BusinessLogicUnit BLU;
+    byte oldData;
     
-    public Receiver(DatagramSocket serverSocket, Server server)
+    public Receiver(DatagramSocket serverSocket, Server server, BusinessLogicUnit BLU)
     {
         clientsNumber = 0;
+        oldData = 0;
         this.serverSocket = serverSocket;
         this.server = server;
+        this.BLU = BLU;
     }
     
     @Override
     public void run()
     {
         byte[] receiveData = new byte[4];
-        while(server.clients.isEmpty())
+        while(server.clients.size() < 3)
         {
             DatagramPacket receivePacket = 
                     new DatagramPacket(receiveData, receiveData.length);
@@ -45,10 +50,8 @@ class Receiver implements Runnable
             } catch (IOException ex) {
                 Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            server.addUser(receivePacket);
+            BLU.addUser(receivePacket.getAddress());
         }
-        System.out.println("Luta Krzysiek dwa pedały");
-        System.out.println("cały semestr sie ruchaly");
         while(true)
         {
             DatagramPacket receivePacket = 
@@ -58,7 +61,11 @@ class Receiver implements Runnable
             } catch (IOException ex) {
                 Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            server.translateData(receiveData[0]);
+            if (receiveData[0] != oldData)
+            {
+                BLU.setData(receiveData[0]);
+                oldData = receiveData[0];
+            }
         }
     }
     

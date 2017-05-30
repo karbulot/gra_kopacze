@@ -10,6 +10,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,11 +21,13 @@ import java.util.logging.Logger;
 public class Sender implements Runnable{
     DatagramSocket serverSocket;
     Server server;
+    BusinessLogicUnit BLU;
     
-    public Sender(DatagramSocket serverSocket, Server server)
+    public Sender(DatagramSocket serverSocket, Server server, BusinessLogicUnit BLU)
     {
         this.server = server;
         this.serverSocket = serverSocket;
+        this.BLU = BLU;
     }
     
     
@@ -40,13 +43,19 @@ public class Sender implements Runnable{
                  //   "Przygotowuje sie do wyslania wiadomosci klientowi " + x);
                 try { 
                     DatagramPacket sendPacket = new DatagramPacket(
-                    client.getState(), client.getState().length, client.getIP(), client.getPort());
+                    client.getState(), client.getState().length, client.getIP(), server.PORT);
                     serverSocket.send(sendPacket);
                 } catch (IOException ex) {
                     Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
                 }
                // System.out.println("wyslalem wiadomosc klientowi nr " + x);
                 x++;
+            }
+            
+            try {
+                TimeUnit.MILLISECONDS.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

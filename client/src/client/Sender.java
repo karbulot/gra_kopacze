@@ -10,6 +10,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,10 +23,12 @@ public class Sender implements Runnable{
     Client client;
     byte[] data;
     InetAddress IPAddress;
+    BusinessLogicUnit BLU;
     
-    Sender(DatagramSocket clientSocket, Client client) {
+    public Sender(DatagramSocket clientSocket, Client client, BusinessLogicUnit BLU) {
         this.clientSocket = clientSocket;
         this.client = client;
+        this.BLU = BLU;
         data = new byte[1];
         data[0] = -1;
         try {
@@ -50,10 +53,16 @@ public class Sender implements Runnable{
         while (true)
         {
             try {
-                DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, 9876);
+                DatagramPacket sendPacket = new DatagramPacket(data, data.length, IPAddress, client.PORT);
                 clientSocket.send(sendPacket);
             } catch (IOException ex) {
                 Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            try {
+                TimeUnit.MILLISECONDS.sleep(50);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

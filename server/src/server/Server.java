@@ -23,30 +23,23 @@ public class Server {
     Sender sender;
     Receiver receiver;
     BusinessLogicUnit BLU;
+    public static int PORT = 9876;
     
     public Server()
     {
         DatagramSocket serverSocket = null;
         try {
-            serverSocket = new DatagramSocket(9876);
+            serverSocket = new DatagramSocket(PORT);
         } catch (SocketException ex) {
             Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
         }
         //wątki serwera
-        this.receiver = new Receiver(serverSocket, this);
-        this.sender = new Sender(serverSocket, this);
         this.BLU = new BusinessLogicUnit(this);
+        this.receiver = new Receiver(serverSocket, this, this.BLU);
+        this.sender = new Sender(serverSocket, this, this.BLU);
         new Thread(this.receiver).start();
         new Thread(this.sender).start();
         new Thread(this.BLU).start();
-    }
-    public void addUser(DatagramPacket datagram)
-    {
-        BLU.addUser(datagram);
-    }
-    public void translateData(byte data)
-    {
-        BLU.setData(data);
     }
     public static void main(String[] args)
     {

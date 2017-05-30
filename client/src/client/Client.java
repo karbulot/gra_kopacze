@@ -22,6 +22,7 @@ class Client
     BusinessLogicUnit BLU;
     GameObject game;
     byte dig;
+    public static int PORT = 9876;
     
     public Client()
     {
@@ -31,9 +32,9 @@ class Client
         } catch (SocketException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.sender = new Sender(clientSocket, this);
-        this.receiver = new Receiver(clientSocket, this);
         this.BLU = new BusinessLogicUnit(this);
+        this.sender = new Sender(clientSocket, this, this.BLU);
+        this.receiver = new Receiver(clientSocket, this, this.BLU);
         new Thread(this.sender).start();
         new Thread(this.receiver).start();
         new Thread(this.BLU).start();
@@ -50,10 +51,6 @@ class Client
         return sender.getData();
     }
     
-    public void businessLogic(byte[] command)
-    {
-        BLU.translate(command);
-    }
     
     public static void main(String[] args)
     {
