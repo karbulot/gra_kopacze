@@ -6,6 +6,7 @@
 package client;
 
 import java.util.Arrays;
+import java.util.Scanner;
 
 /**
  *
@@ -13,8 +14,14 @@ import java.util.Arrays;
  */
 public class BusinessLogicUnit implements Runnable{
     
+    Client client;
     byte[] lastCommand = null;
     byte[] presentCommand = null;
+    
+    public BusinessLogicUnit(Client client)
+    {
+        this.client = client;
+    }
     
     public void translate(byte[] command)
     {
@@ -36,12 +43,20 @@ public class BusinessLogicUnit implements Runnable{
     
     @Override
     public void run() {
+        Scanner scanner = new Scanner(System.in);
+        byte i;
         while (true)
         {
-            if(!Arrays.equals(lastCommand, presentCommand))
-            {
-                
-            }
+            i = scanner.nextByte();
+            System.out.println(i);
+            byte x = client.getData();
+            byte y = (byte)(1 <<( i - 1));
+            System.out.println(y);
+            byte[] data = new byte[1];
+            data[0] = (byte)(x - y);
+            client.setSendData(data);
+            System.out.println(x);
+            System.out.println(data[0]);
         }
     }
     

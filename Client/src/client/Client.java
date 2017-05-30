@@ -21,6 +21,7 @@ class Client
     Receiver receiver;
     BusinessLogicUnit BLU;
     GameObject game;
+    byte dig;
     
     public Client()
     {
@@ -32,10 +33,21 @@ class Client
         }
         this.sender = new Sender(clientSocket, this);
         this.receiver = new Receiver(clientSocket, this);
-        this.BLU = new BusinessLogicUnit();
+        this.BLU = new BusinessLogicUnit(this);
         new Thread(this.sender).start();
         new Thread(this.receiver).start();
         new Thread(this.BLU).start();
+        dig = 1;
+    }
+    
+    public void setSendData(byte[] data)
+    {
+        sender.setData(data);
+    }
+    
+    public byte getData()
+    {
+        return sender.getData();
     }
     
     public void businessLogic(byte[] command)

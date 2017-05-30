@@ -5,9 +5,12 @@
  */
 package server;
 
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,10 +19,11 @@ import java.util.logging.Logger;
  * @author aniej
  */
 public class Server {
-    public void newClient(int port, InetAddress iP)
-    {
-        
-    }
+    public List<ClientRecord> clients = new ArrayList<ClientRecord>();
+    Sender sender;
+    Receiver receiver;
+    BusinessLogicUnit BLU;
+    
     public Server()
     {
         DatagramSocket serverSocket = null;
@@ -28,16 +32,24 @@ public class Server {
         } catch (SocketException ex) {
             Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Thread receiver = new Thread(new Receiver(serverSocket, this));
-        Thread sender = new Thread(new Sender(serverSocket, this));
-        //Thread BLU
-        receiver.start();
-        sender.start();
-        //BLU.start();
-        
+        //wątki serwera
+        this.receiver = new Receiver(serverSocket, this);
+        this.sender = new Sender(serverSocket, this);
+        this.BLU = new BusinessLogicUnit(this);
+        new Thread(this.receiver).start();
+        new Thread(this.sender).start();
+        new Thread(this.BLU).start();
+    }
+    public void addUser(DatagramPacket datagram)
+    {
+        BLU.addUser(datagram);
+    }
+    public void translateData(byte data)
+    {
+        BLU.setData(data);
     }
     public static void main(String[] args)
     {
-        Server server = new Server();
+        new Server();
     }
 }

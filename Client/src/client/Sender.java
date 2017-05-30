@@ -26,11 +26,8 @@ public class Sender implements Runnable{
     Sender(DatagramSocket clientSocket, Client client) {
         this.clientSocket = clientSocket;
         this.client = client;
-        data = new byte[4];
-        data[0] = 0;
-        data[1] = 0;
-        data[2] = 0;
-        data[3] = 0;
+        data = new byte[1];
+        data[0] = 127;
         try {
             this.IPAddress = InetAddress.getLocalHost();
         } catch (UnknownHostException ex) {
@@ -41,6 +38,11 @@ public class Sender implements Runnable{
     public void setData(byte[] data)
     {
         this.data = data;
+    }
+    
+    public byte getData()
+    {
+        return data[0];
     }
 
     @Override

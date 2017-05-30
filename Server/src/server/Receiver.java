@@ -31,21 +31,33 @@ class Receiver implements Runnable
         this.serverSocket = serverSocket;
         this.server = server;
     }
+    
     @Override
     public void run()
     {
         byte[] receiveData = new byte[4];
-        while(true)
+        while(server.clients.isEmpty())
         {
-            System.out.println("Odbieram paczke");
             DatagramPacket receivePacket = 
                     new DatagramPacket(receiveData, receiveData.length);
             try {
                 serverSocket.receive(receivePacket);
-                System.out.println("odebralem paczke");
             } catch (IOException ex) {
                 Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
+            server.addUser(receivePacket);
+        }
+        System.out.println("dodano uzytkownika");
+        while(true)
+        {
+            DatagramPacket receivePacket = 
+                    new DatagramPacket(receiveData, receiveData.length);
+            try {
+                serverSocket.receive(receivePacket);
+            } catch (IOException ex) {
+                Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            server.translateData(receiveData[0]);
         }
     }
     

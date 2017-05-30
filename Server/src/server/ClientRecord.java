@@ -14,11 +14,24 @@ import java.net.InetAddress;
 public class ClientRecord {
     private int port;
     private InetAddress iP;
+    private byte[] state;
     
     public ClientRecord(int port, InetAddress iP)
     {
         this.port = port;
         this.iP = iP;
+        state = new byte[1];
+        state[0] = 127;
+    }
+    
+    public byte[] getState()
+    {
+        return state;
+    }
+    
+    public void setData(byte data)
+    {
+        state[0] = data;
     }
     
     public int getPort()

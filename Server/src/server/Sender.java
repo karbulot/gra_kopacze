@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 public class Sender implements Runnable{
     DatagramSocket serverSocket;
     Server server;
-    List<ClientRecord> clients = new ArrayList<ClientRecord>();
     
     public Sender(DatagramSocket serverSocket, Server server)
     {
@@ -28,30 +27,25 @@ public class Sender implements Runnable{
         this.serverSocket = serverSocket;
     }
     
-    public void addUser(ClientRecord client)
-    {
-        clients.add(client);
-    }
     
     @Override
-    public void run() {
-        byte[] sendData = new byte[4];
+    public void run()
+    { 
         while (true)
         {
             int x = 1;
-            for (ClientRecord client : clients)
+            for (ClientRecord client : server.clients)
             {
-                System.out.println(
-                    "Przygotowuje sie do wyslania wiadomosci klientowi " + x);
+                //System.out.println(
+                 //   "Przygotowuje sie do wyslania wiadomosci klientowi " + x);
                 try { 
                     DatagramPacket sendPacket = new DatagramPacket(
-                    sendData, sendData.length, client.getIP(), client.getPort());
+                    client.getState(), client.getState().length, client.getIP(), client.getPort());
                     serverSocket.send(sendPacket);
                 } catch (IOException ex) {
                     Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
                 }
-               
-                System.out.println("wyslalem wiadomosc klientowi nr " + x);
+               // System.out.println("wyslalem wiadomosc klientowi nr " + x);
                 x++;
             }
         }
