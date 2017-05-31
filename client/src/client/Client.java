@@ -21,7 +21,6 @@ class Client
     Receiver receiver;
     BusinessLogicUnit BLU;
     GameObject game;
-    byte dig;
     public static int PORT = 9876;
     
     public Client()
@@ -32,25 +31,13 @@ class Client
         } catch (SocketException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.BLU = new BusinessLogicUnit(this);
         this.sender = new Sender(clientSocket, this, this.BLU);
+        this.BLU = new BusinessLogicUnit(this, this.sender);
         this.receiver = new Receiver(clientSocket, this, this.BLU);
         new Thread(this.sender).start();
-        new Thread(this.receiver).start();
         new Thread(this.BLU).start();
-        dig = 1;
+        new Thread(this.receiver).start();
     }
-    
-    public void setSendData(byte[] data)
-    {
-        sender.setData(data);
-    }
-    
-    public byte getData()
-    {
-        return sender.getData();
-    }
-    
     
     public static void main(String[] args)
     {

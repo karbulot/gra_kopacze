@@ -22,13 +22,13 @@ public class Receiver implements Runnable{
     DatagramSocket clientSocket;
     Client client;
     BusinessLogicUnit BLU;
-    byte data;
+    byte[] data;
 
     public Receiver(DatagramSocket clientSocket, Client client, BusinessLogicUnit BLU) {
         this.clientSocket = clientSocket;
         this.BLU = BLU;
         this.client = client;
-        data = 0;
+        data = new byte[4];
     }
 
     @Override
@@ -44,13 +44,9 @@ public class Receiver implements Runnable{
                 Logger.getLogger(
                         Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if(data != receiveData[0])
-            {
-                data = receiveData[0];
-                BLU.setData(data);
-            }
+            System.out.println(receiveData[0]);
             try {
-                TimeUnit.MILLISECONDS.sleep(50);
+                TimeUnit.MILLISECONDS.sleep(30);
             } catch (InterruptedException ex) {
                 Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
             }

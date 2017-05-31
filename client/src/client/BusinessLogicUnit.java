@@ -15,16 +15,16 @@ import java.util.Scanner;
 public class BusinessLogicUnit implements Runnable{
     
     Client client;
-    byte data;
+    Sender sender;
+    byte[] data;
+    byte[] oldData;
     
-    public BusinessLogicUnit(Client client)
+    public BusinessLogicUnit(Client client, Sender sender)
     {
         this.client = client;
-    }
-    
-    public void setData(byte data)
-    {
-        this.data = data;
+        this.sender = sender;
+        data = new byte[4];
+        oldData = new byte[4];
     }
     
      public byte[] fill(byte[] a2)
@@ -36,24 +36,29 @@ public class BusinessLogicUnit implements Runnable{
         }
         return a1;
     }
+     
+    public void setData(byte[] data)
+    {
+        this.data[0] = data[0];
+        this.data[1] = data[1];
+        this.data[2] = data[2];
+        this.data[3] = data[3];
+    }
     
     @Override
     public void run() {
-        Scanner scanner = new Scanner(System.in);
-        byte i;
-        while (true)
+        System.out.println("oczekiwanie na innych graczy.");
+        sender.setData((byte)0);
+        while(data[0] == 0);
+        System.out.println("xd");
+        int i = 3;
+        while (i > 0)
         {
-            i = scanner.nextByte();
-            System.out.println(i);
-            byte x = client.getData();
-            byte y = (byte)(1 <<( i - 1));
-            System.out.println(y);
-            byte[] data = new byte[1];
-            data[0] = (byte)(x - y);
-            client.setSendData(data);
-            System.out.println(x);
-            System.out.println(data[0]);
+            while(i < data[0]);
+            System.out.println("Gra rozpocznie się za "+i);
+            i--;
         }
+        System.out.println("elo.");
     }
     
 }

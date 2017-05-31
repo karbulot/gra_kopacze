@@ -38,9 +38,9 @@ public class Sender implements Runnable{
         }
     }
     
-    public void setData(byte[] data)
+    public void setData(byte data)
     {
-        this.data = data;
+        this.data[0] = data;
     }
     
     public byte getData()
@@ -57,12 +57,6 @@ public class Sender implements Runnable{
                 clientSocket.send(sendPacket);
             } catch (IOException ex) {
                 Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
-            try {
-                TimeUnit.MILLISECONDS.sleep(50);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }

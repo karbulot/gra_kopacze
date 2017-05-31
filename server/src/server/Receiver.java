@@ -26,12 +26,10 @@ class Receiver implements Runnable
     byte clientsNumber;
     Server server;
     BusinessLogicUnit BLU;
-    byte oldData;
     
     public Receiver(DatagramSocket serverSocket, Server server, BusinessLogicUnit BLU)
     {
         clientsNumber = 0;
-        oldData = 0;
         this.serverSocket = serverSocket;
         this.server = server;
         this.BLU = BLU;
@@ -40,8 +38,8 @@ class Receiver implements Runnable
     @Override
     public void run()
     {
-        byte[] receiveData = new byte[4];
-        while(server.clients.size() < 3)
+        byte[] receiveData = new byte[1];
+        while(server.clients.size() < 1)
         {
             DatagramPacket receivePacket = 
                     new DatagramPacket(receiveData, receiveData.length);
@@ -52,6 +50,7 @@ class Receiver implements Runnable
             }
             BLU.addUser(receivePacket.getAddress());
         }
+        BLU.startGame();
         while(true)
         {
             DatagramPacket receivePacket = 
@@ -61,10 +60,12 @@ class Receiver implements Runnable
             } catch (IOException ex) {
                 Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (receiveData[0] != oldData)
+            for(ClientRecord c : server.clients)
             {
-                BLU.setData(receiveData[0]);
-                oldData = receiveData[0];
+                if (receivePacket.getAddress().equals(c.getIP()))
+                {
+                    c.setReceive(receiveData);
+                }
             }
         }
     }

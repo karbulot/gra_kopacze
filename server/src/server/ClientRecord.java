@@ -14,24 +14,47 @@ import java.net.InetAddress;
 public class ClientRecord {
     private int port;
     private InetAddress iP;
-    private byte[] state;
+    private byte[] data;
+    private byte[] oldData;
+    private byte[] receive;
     
     public ClientRecord(int port, InetAddress iP)
     {
         this.port = port;
         this.iP = iP;
-        state = new byte[1];
-        state[0] = 0;
+        data = new byte[4];
+        oldData = new byte[4];
+        receive = new byte[1];
     }
     
-    public byte[] getState()
+    public void setReceive(byte[] receive)
     {
-        return state;
+        this.receive[0] = receive[0];
     }
     
-    public void setData(byte data)
+    public byte[] getReceive()
     {
-        state[0] = data;
+        return receive;
+    }
+    
+    public byte[] getData()
+    {
+        return data;
+    }
+    
+    public byte[] getOldData()
+    {
+        return oldData;
+    }
+    
+    public void setOldData(byte[] data)
+    {
+        oldData[0] = data[0];
+    }
+    
+    public void setData(byte[] data)
+    {
+        this.data[0] = data[0];
     }
     
     public int getPort()

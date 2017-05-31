@@ -43,12 +43,13 @@ public class Sender implements Runnable{
                  //   "Przygotowuje sie do wyslania wiadomosci klientowi " + x);
                 try { 
                     DatagramPacket sendPacket = new DatagramPacket(
-                    client.getState(), client.getState().length, client.getIP(), server.PORT);
+                    client.getData(), client.getData().length, client.getIP(), server.PORT);
                     serverSocket.send(sendPacket);
                 } catch (IOException ex) {
                     Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
                 }
-               // System.out.println("wyslalem wiadomosc klientowi nr " + x);
+                //System.out.println("wyslalem wiadomosc klientowi nr " + x);
+                //System.out.println("o treści "+client.getData()[0]);
                 x++;
             }
             
