@@ -58,6 +58,7 @@ public class Sender implements Runnable{
             } catch (IOException ex) {
                 Logger.getLogger(Sender.class.getName()).log(Level.SEVERE, null, ex);
             }
+            //System.out.println("wyslano "+data[0]);
         }
     }
     

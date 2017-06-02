@@ -7,6 +7,8 @@ package server;
 
 import java.net.DatagramPacket;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,6 +21,7 @@ public class BusinessLogicUnit implements Runnable{
     
     Server server;
     byte start;
+    Sender sender;
     
     public BusinessLogicUnit(Server server)
     {
@@ -26,26 +29,41 @@ public class BusinessLogicUnit implements Runnable{
         start = 0;
     }
     
-    public synchronized void addUser(InetAddress address)
+    public void setSender(Sender sender)
     {
-        byte f = 0;
+        this.sender = sender;
+    }
+    
+    public synchronized int addUser(InetAddress address)
+    {
+        int x = 1;
         for (ClientRecord c : server.clients)
         {
             if (c.getIP().equals(address))
             {
-                f = 1;
+                return x;
             }
+            x++;
         }
-        if (f == 0)
-        {
-            server.clients.add(new ClientRecord(server.PORT, address));
-            System.out.println("Dodano użytkownika o adresie: " + address);
-        }
+        server.clients.add(new ClientRecord(server.PORT, address));
+        System.out.println("Dodano użytkownika o adresie: " + address);
+        return x;
     }
     
-    public void startGame()
+    public boolean startGame()
     {
+        int x = 0;
+        for (ClientRecord c: server.clients)
+        {
+            x++;
+            if (c.getReceive()[0] == 0)
+                return true;
+        }
+        if (x < 1)
+            return true;
         start = 3;
+        sender.startGame();
+        return false;
     }
     
     @Override
@@ -64,7 +82,7 @@ public class BusinessLogicUnit implements Runnable{
                 f = 1;
                 for(ClientRecord c: server.clients)
                 {
-                    if (c.getReceive()[0] != 0)
+                    if (c.getReceive()[0] == 0)
                         f = 0;
                 }
             }
@@ -81,7 +99,7 @@ public class BusinessLogicUnit implements Runnable{
                     c.setData(message);
                     System.out.println("ustawiono "+message[0]);
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
                     }

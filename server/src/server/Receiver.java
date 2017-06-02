@@ -14,6 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -39,7 +40,7 @@ class Receiver implements Runnable
     public void run()
     {
         byte[] receiveData = new byte[1];
-        while(server.clients.size() < 1)
+        while(BLU.startGame())
         {
             DatagramPacket receivePacket = 
                     new DatagramPacket(receiveData, receiveData.length);
@@ -48,9 +49,27 @@ class Receiver implements Runnable
             } catch (IOException ex) {
                 Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            BLU.addUser(receivePacket.getAddress());
+            for(ClientRecord c : server.clients)
+            {
+                if(c.getIP().equals(receivePacket.getAddress()))
+                {
+                    c.setReceive(receiveData);
+                }
+            }
+            if(receiveData[0] == 0)
+            {
+                int port = server.PORT + BLU.addUser(receivePacket.getAddress());
+                
+                System.out.println(port);
+                byte[] bytes = ByteBuffer.allocate(4).putInt(port).array();
+                DatagramPacket sendPacket = new DatagramPacket(bytes, bytes.length, receivePacket.getAddress(), receivePacket.getPort());
+                try {
+                    serverSocket.send(sendPacket);
+                } catch (IOException ex) {
+                    Logger.getLogger(Receiver.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
-        BLU.startGame();
         while(true)
         {
             DatagramPacket receivePacket = 

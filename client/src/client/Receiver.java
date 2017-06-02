@@ -22,13 +22,11 @@ public class Receiver implements Runnable{
     DatagramSocket clientSocket;
     Client client;
     BusinessLogicUnit BLU;
-    byte[] data;
 
     public Receiver(DatagramSocket clientSocket, Client client, BusinessLogicUnit BLU) {
         this.clientSocket = clientSocket;
         this.BLU = BLU;
         this.client = client;
-        data = new byte[4];
     }
 
     @Override
@@ -44,7 +42,7 @@ public class Receiver implements Runnable{
                 Logger.getLogger(
                         Receiver.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(receiveData[0]);
+            BLU.setData(receiveData);
             try {
                 TimeUnit.MILLISECONDS.sleep(30);
             } catch (InterruptedException ex) {

@@ -37,6 +37,7 @@ public class Server {
         this.BLU = new BusinessLogicUnit(this);
         this.receiver = new Receiver(serverSocket, this, this.BLU);
         this.sender = new Sender(serverSocket, this, this.BLU);
+        this.BLU.setSender(this.sender);
         new Thread(this.receiver).start();
         new Thread(this.sender).start();
         new Thread(this.BLU).start();

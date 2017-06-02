@@ -7,6 +7,8 @@ package client;
 
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -19,12 +21,15 @@ public class BusinessLogicUnit implements Runnable{
     byte[] data;
     byte[] oldData;
     
-    public BusinessLogicUnit(Client client, Sender sender)
+    public BusinessLogicUnit(Client client)
     {
         this.client = client;
-        this.sender = sender;
         data = new byte[4];
         oldData = new byte[4];
+    }
+    public void setSender(Sender sender)
+    {
+        this.sender = sender;
     }
     
      public byte[] fill(byte[] a2)
@@ -48,13 +53,27 @@ public class BusinessLogicUnit implements Runnable{
     @Override
     public void run() {
         System.out.println("oczekiwanie na innych graczy.");
-        sender.setData((byte)0);
-        while(data[0] == 0);
+        sender.setData((byte)(-1));
+        while(this.data[0] == 0)
+        {
+            try {
+                Thread.sleep(30);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         System.out.println("xd");
         int i = 3;
         while (i > 0)
         {
-            while(i < data[0]);
+            while(i < data[0])
+            {
+                try {
+                    Thread.sleep(20);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
             System.out.println("Gra rozpocznie się za "+i);
             i--;
         }
