@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package sbin;
+package game;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -13,50 +14,43 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
  * @author Archax
  */
-public class SbinServer implements Runnable{
-    int players;
-    
-    public SbinServer()
+public class KbinServer implements Runnable{
+    Game game;
+    KbinServer(Game game)
     {
-        players = 0;
+        this.game = game;
     }
-    
-    public void addPlayer()
+    Game getGame()
     {
-        players++;
+        return game;
     }
     
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(SBin.PORTinput)) {
+        try (ServerSocket serverSocket = new ServerSocket(KBin.PORTinput)) {
             ExecutorService executor = Executors.newFixedThreadPool(4);
             while (true) {
                 try {
                     Socket socket = serverSocket.accept();
                     if (socket != null){
-                        System.out.println("received msg");
+                        System.out.println("serverSocket accept");
                         ReceiveMessageTask receive = 
                                 new ReceiveMessageTask(socket, this);
-                        
-                        /* jeden watek */
-                        try{
-                            receive.call();
-                        } catch (Exception e){}
-                        
-                        /*   */
-                        
+                        receive.call();
                     } else {
                     }
-                } catch(SocketTimeoutException ex){}
+                } catch(SocketTimeoutException ex){} catch (Exception ex) {
+                    Logger.getLogger(KbinServer.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         } catch (IOException ex) {
-            Logger.getLogger(SbinServer.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(KbinServer.class.getName()).log(Level.SEVERE, null, ex);
         }     
     }
-    
 }

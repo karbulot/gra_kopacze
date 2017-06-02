@@ -20,25 +20,26 @@ import javafx.concurrent.Task;
  */
 public class SendMessageTask extends Task<Void> {
     byte[] instruction; //rozkaz do przesłania
- 
-    public SendMessageTask(byte[] instruction) { 
+    KbinServer server;
+    
+    public SendMessageTask(byte[] instruction, KbinServer server) { 
         this.instruction = new byte[instruction.length];
         System.arraycopy(instruction, 0, this.instruction, 0, instruction.length);
+        this.server = server;
     }
  
     @Override 
     protected Void call() throws Exception { 
-            try (Socket socket = new Socket("localhost", KBin.PORT);
+            System.out.println("SendMessageTask start");
+            try (Socket socket = new Socket("localhost", KBin.PORToutput);
                 OutputStream output = socket.getOutputStream();
                 BufferedInputStream input = new BufferedInputStream(new ByteArrayInputStream(instruction)) {}) {
-            byte[] buffer = new byte[4096]; //bufor 4KB
+            byte[] buffer = new byte[4]; //bufor 4B
             int readSize;
             while ((readSize = input.read(buffer)) != -1) {
-                for (int i = 0; i < readSize; i++){
-                    System.out.print(buffer.toString());
-                }
                 output.write(buffer, 0, readSize);
             }
+            System.out.println("SendMessageTask done");
         } catch (IOException e){
             Logger.getLogger(SendMessageTask.class.getName()).log(Level.WARNING, e.getMessage(), e);   
         }

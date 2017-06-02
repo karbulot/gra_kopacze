@@ -11,7 +11,8 @@ package sbin;
  */
 public class SBin {
     
-    public static int PORT = 1256;
+    public static int PORToutput = 1258;
+    public static int PORTinput = 1256;
 
     /**
      * @param args the command line arguments
