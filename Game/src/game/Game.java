@@ -1,0 +1,76 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package game;
+
+import java.util.ArrayList;
+
+/**
+ *
+ * @author Archax
+ */
+public class Game implements Runnable{
+
+    private ArrayList<Pit> pits; 
+    private ArrayList<Player> players;
+    private long time;
+    
+    /* game's initiation */
+    public void init(int numberOfPlayers){
+        this.pits = new ArrayList(numberOfPlayers);
+        this.players = new ArrayList(numberOfPlayers);
+        for (int i = 1; i <= numberOfPlayers; i++){
+            this.pits.add(new Pit(i));
+            this.players.add(new Player(i,i));
+        }
+    }
+    
+    /* change game's time */
+    public void setTime(int bonusTime){
+        this.time += bonusTime;
+    }
+    
+    /* swap p1 <> p2 */
+    public void swapPlayers(int p1, int p2) throws SwapException {
+        int id1 = players.get(players.indexOf(p1)).getPitId();
+        int id2 = players.get(players.indexOf(p2)).getPitId();
+        
+        players.get(players.indexOf(p1)).setPitId(id2);
+        players.get(players.indexOf(p2)).setPitId(id1);
+    }
+    
+    public void setPitProgress(int id, int amount){
+        pits.get(id).setProgress(amount);
+    }
+    
+    private void updatePitProgress(int id) throws PlayerSearchException{
+        Player digger = null;
+        for (Player p : players){
+            if (p.getPitId() == id){
+                digger = p;
+                break;
+            }
+        }
+        if (digger == null){
+            throw new PlayerSearchException();
+        }
+        pits.get(id).setProgress(digger.getState() * digger.getSpeed() * 0);
+    }
+    
+    public void setPlayerSpeed(int id, int bonusPC){
+        players.get(players.indexOf(id)).setSpeed(bonusPC);
+    }
+    
+    public void setPlayerSpeed(int id, double bonus){
+        players.get(players.indexOf(id)).setSpeed(bonus);
+    } 
+
+    @Override
+    public void run() {
+        
+    }
+     
+
+}
