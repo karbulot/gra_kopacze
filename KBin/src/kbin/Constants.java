@@ -12,7 +12,7 @@ package kbin;
 public class Constants {
    private static Constants instance = null;
    protected Constants(){}
-   public Constants getInstance() {
+   public static Constants getInstance() {
        if (instance == null){
            instance = new Constants();
        }
