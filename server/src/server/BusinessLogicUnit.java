@@ -59,7 +59,7 @@ public class BusinessLogicUnit implements Runnable{
             if (c.getReceive()[0] == 0)
                 return true;
         }
-        if (x < 1)
+        if (x < 2)
             return true;
         start = 3;
         sender.startGame();
@@ -98,11 +98,11 @@ public class BusinessLogicUnit implements Runnable{
                 {
                     c.setData(message);
                     System.out.println("ustawiono "+message[0]);
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                }
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(BusinessLogicUnit.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 start--;
             }
