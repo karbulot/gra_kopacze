@@ -110,8 +110,7 @@ public class Game implements Runnable{
                         if (x.getBonusTime() == 0){
                             x.setSpeed();
                         }
-                    }
-                        });
+                    }});
                 TimeUnit.SECONDS.sleep(1);
                 this.time--;
             }
