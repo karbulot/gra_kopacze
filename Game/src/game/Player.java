@@ -69,4 +69,9 @@ public class Player implements Comparable<Integer>{
         this.state *= -1;
     }
     
+    @Override
+    public String toString(){
+        return "Player " + this.id +" Pit " + this.pitId + " state " + this.state +" speed " + this.speed + "\n";
+    }
+    
 }

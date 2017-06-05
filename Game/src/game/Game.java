@@ -6,6 +6,9 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -18,7 +21,7 @@ public class Game implements Runnable{
     private long time;
     
     /* game's initiation */
-    public void init(int numberOfPlayers){
+    public Game(int numberOfPlayers){
         this.pits = new ArrayList(numberOfPlayers);
         this.players = new ArrayList(numberOfPlayers);
         for (int i = 1; i <= numberOfPlayers; i++){
@@ -66,10 +69,27 @@ public class Game implements Runnable{
     public void setPlayerSpeed(int id, double bonus){
         players.get(players.indexOf(id)).setSpeed(bonus);
     } 
+    
+    @Override
+    public String toString(){
+        String s = new String();
+        for (Pit p : pits){
+            s += p.toString();
+        }
+        for (Player p : players){
+            s += p.toString();
+        }
+        s += "time " + this.time + "\n";
+        return s;
+    }
 
     @Override
     public void run() {
-        
+        try {
+            TimeUnit.SECONDS.sleep(1);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
      
 

@@ -32,5 +32,10 @@ public class Pit {
         return this.id;
     }
     
+    @Override
+    public String toString(){
+        return "Pit " + this.id +" progress " + this.progress + "\n";
+    }
+    
     
 }
