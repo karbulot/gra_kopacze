@@ -104,7 +104,14 @@ public class Game implements Runnable{
                         Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 });
-                
+                this.players.forEach(x -> {
+                    if (x.getBonusTime() > 0){
+                        x.setBonusTime();
+                        if (x.getBonusTime() == 0){
+                            x.setSpeed();
+                        }
+                    }
+                        });
                 TimeUnit.SECONDS.sleep(1);
                 this.time--;
             }

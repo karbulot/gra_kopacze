@@ -49,6 +49,14 @@ public class Player implements Comparable<Integer>{
         return this.speed / 100;
     }
     
+    public int getBonusTime(){
+        return this.bonusTime;
+    }
+    
+    public void setBonusTime(){
+        this.bonusTime--;
+    }
+    
     /* add bonus (flat) to dig speed */
     public void setSpeed(double bonus, int time){
         this.bonusTime = time;
@@ -59,6 +67,10 @@ public class Player implements Comparable<Integer>{
     public void setSpeed(int bonusPC, int time){
         this.bonusTime = time;
         this.speed += (this.speed / 100) * bonusPC;
+    }
+    
+    public void setSpeed(){
+        this.speed = Constants.BASIC_SPEED;
     }
 
     @Override
