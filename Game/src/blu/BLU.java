@@ -17,6 +17,8 @@ public class BLU implements Runnable{
     
     private final BLUMemory memory;
     private final Game game;
+    
+    private boolean quit = false;
 
     
     public BLU(BLUMemory memory, Game game){
@@ -26,14 +28,19 @@ public class BLU implements Runnable{
 
     @Override
     public void run(){
-        boolean quit = false;
-        while (!quit){
-            while (memory.isInputEmpty());
-            try {          
-                this.translate(memory.getNextInstruction());
-            } catch (UnknownInstructionException ex) {
+        while (!this.quit){
+            try {
+                Thread.sleep(20);
+            } catch (InterruptedException ex) {
                 Logger.getLogger(BLU.class.getName()).log(Level.SEVERE, null, ex);
-                quit = true;
+            }
+            if (!memory.isInputEmpty()){
+                try {          
+                    this.translate(memory.getNextInstruction());
+                } catch (UnknownInstructionException ex) {
+                    Logger.getLogger(BLU.class.getName()).log(Level.SEVERE, null, ex);
+                    this.quit = true;
+            }
             }
         }
     }
@@ -47,7 +54,7 @@ public class BLU implements Runnable{
                break;
                 
           case Constants.CHANGE_STATE:
-               /* to do */
+               this.game.setPlayerState(message.getSender());
                break;
             
           case Constants.DIG:
@@ -55,12 +62,14 @@ public class BLU implements Runnable{
                break;
             
           case Constants.SLOW_TARGET_PC:
+               //this.game.setPlayerSpeed(this., 0);
                break;
             
           case Constants.SPEED_BOOST_PC:
                break;
             
           case Constants.SWAP:
+               this.game.swapPlayers(message.getSender(), message.getData()[0]);
                break;
                
           case Constants.SPEED_BOOST_FLAT:
@@ -68,6 +77,10 @@ public class BLU implements Runnable{
                 
           case Constants.SLOW_TARGET_FLAT:
                break;
+               
+          case Constants.END:
+              this.quit = true;
+              break;
                
           default:
               throw new UnknownInstructionException();          

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import blu.Constants;
 
 /**
  *
@@ -16,8 +17,8 @@ import java.util.logging.Logger;
  */
 public class Game implements Runnable{
 
-    private ArrayList<Pit> pits; 
-    private ArrayList<Player> players;
+    private final ArrayList<Pit> pits; 
+    private final ArrayList<Player> players;
     private long time;
     
     /* game's initiation */
@@ -28,6 +29,7 @@ public class Game implements Runnable{
             this.pits.add(new Pit(i));
             this.players.add(new Player(i,i));
         }
+        this.time = Constants.TIME;
     }
     
     /* change game's time */
@@ -36,7 +38,7 @@ public class Game implements Runnable{
     }
     
     /* swap p1 <> p2 */
-    public void swapPlayers(int p1, int p2) throws SwapException {
+    public void swapPlayers(int p1, int p2){
         int id1 = players.get(players.indexOf(p1)).getPitId();
         int id2 = players.get(players.indexOf(p2)).getPitId();
         
@@ -62,16 +64,20 @@ public class Game implements Runnable{
         pits.get(id).setProgress(digger.getState() * digger.getSpeed() * 0);
     }
     
-    public void setPlayerSpeed(int id, int bonusPC){
-        players.get(players.indexOf(id)).setSpeed(bonusPC);
+    public void setPlayerSpeed(int id, int bonusPC, int time){
+        players.get(players.indexOf(id)).setSpeed(bonusPC, time);
     }
     
-    public void setPlayerSpeed(int id, double bonus){
-        players.get(players.indexOf(id)).setSpeed(bonus);
+    public void setPlayerSpeed(int id, double bonus, int time){
+        players.get(players.indexOf(id)).setSpeed(bonus, time);
     } 
     
     public int getPlayersPitId(int playerId){
         return this.players.get(this.players.indexOf(playerId)).getPitId();
+    }
+    
+    public void setPlayerState(int id){
+        this.players.get(this.players.indexOf(id)).setState();
     }
     
     @Override
@@ -90,7 +96,18 @@ public class Game implements Runnable{
     @Override
     public void run() {
         try {
-            TimeUnit.SECONDS.sleep(1);
+            while (this.time > 0){
+                this.pits.forEach(x -> {
+                    try {
+                        this.updatePitProgress(x.getId());
+                    } catch (PlayerSearchException ex) {
+                        Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                });
+                
+                TimeUnit.SECONDS.sleep(1);
+                this.time--;
+            }
         } catch (InterruptedException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }

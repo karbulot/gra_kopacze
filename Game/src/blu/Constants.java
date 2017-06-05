@@ -29,5 +29,8 @@ public class Constants {
    public static final int SPEED_BOOST_PC = 6;
    public static final int SPEED_BOOST_FLAT = 7;
    public static final int CHANGE_STATE = 8;
+   public static final int END = 9;
+   
+   public static final int BASIC_SPEED = 100;
    
 }

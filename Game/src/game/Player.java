@@ -5,7 +5,7 @@
  */
 package game;
 
-import java.util.ArrayList;
+import blu.Constants;
 
 /**
  *
@@ -16,12 +16,16 @@ public class Player implements Comparable<Integer>{
     private final int id;
     private int pitId;
     private double speed;
-    private int state; // 1 - digging; -1 - digging-in 
+    private int state; // 1 - digging; -1 - digging-in
+    private int bonusTime;
+    
     
     Player(int id, int pitId){
         this.id = id;
         this.pitId = pitId;
         this.state = 1;
+        this.speed = Constants.BASIC_SPEED;
+        this.bonusTime = 0;
     }
     
     /* change pitId to newId */
@@ -46,12 +50,14 @@ public class Player implements Comparable<Integer>{
     }
     
     /* add bonus (flat) to dig speed */
-    public void setSpeed(double bonus){
+    public void setSpeed(double bonus, int time){
+        this.bonusTime = time;
         this.speed += bonus;
     }
     
     /* add bonus (percent [int]) to dig speed */
-    public void setSpeed(int bonusPC){
+    public void setSpeed(int bonusPC, int time){
+        this.bonusTime = time;
         this.speed += (this.speed / 100) * bonusPC;
     }
 
