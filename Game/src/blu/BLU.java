@@ -42,27 +42,33 @@ public class BLU implements Runnable{
         byte[] temp = new byte[8];
         
         switch(message.getInstruction()){
-            case Constants.ADD_TIME:
-                break;
+          case Constants.ADD_TIME:
+               this.game.setTime(message.getData()[0]);
+               break;
                 
-            case Constants.CHANGE_STATE:
-                break;
+          case Constants.CHANGE_STATE:
+               /* to do */
+               break;
             
-           case Constants.DIG_PC:
-                break;
+          case Constants.DIG:
+               this.game.setPitProgress(this.game.getPlayersPitId(message.getSender()), message.getData()[0]);
+               break;
             
-           case Constants.DIG_FLAT:
-                break;
+          case Constants.SLOW_TARGET_PC:
+               break;
             
-          case Constants.SLOW_TARGET:
-                break;
-            
-          case Constants.SPEED_BOOST:
-                break;
+          case Constants.SPEED_BOOST_PC:
+               break;
             
           case Constants.SWAP:
-                break;
+               break;
+               
+          case Constants.SPEED_BOOST_FLAT:
+               break;
                 
+          case Constants.SLOW_TARGET_FLAT:
+               break;
+               
           default:
               throw new UnknownInstructionException();          
         }

@@ -70,6 +70,10 @@ public class Game implements Runnable{
         players.get(players.indexOf(id)).setSpeed(bonus);
     } 
     
+    public int getPlayersPitId(int playerId){
+        return this.players.get(this.players.indexOf(playerId)).getPitId();
+    }
+    
     @Override
     public String toString(){
         String s = new String();
