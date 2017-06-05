@@ -6,6 +6,8 @@
 package blu;
 
 import game.Game;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,15 +29,42 @@ public class BLU implements Runnable{
         boolean quit = false;
         while (!quit){
             while (memory.isInputEmpty());
-            this.translate(memory.getNextInstruction());          
+            try {          
+                this.translate(memory.getNextInstruction());
+            } catch (UnknownInstructionException ex) {
+                Logger.getLogger(BLU.class.getName()).log(Level.SEVERE, null, ex);
+                quit = true;
+            }
         }
     }
     
-    void translate(instructionClass message){
+    void translate(instructionClass message) throws UnknownInstructionException{
         byte[] temp = new byte[8];
         
         switch(message.getInstruction()){
+            case Constants.ADD_TIME:
+                break;
+                
+            case Constants.CHANGE_STATE:
+                break;
             
+           case Constants.DIG_PC:
+                break;
+            
+           case Constants.DIG_FLAT:
+                break;
+            
+          case Constants.SLOW_TARGET:
+                break;
+            
+          case Constants.SPEED_BOOST:
+                break;
+            
+          case Constants.SWAP:
+                break;
+                
+          default:
+              throw new UnknownInstructionException();          
         }
               
     }

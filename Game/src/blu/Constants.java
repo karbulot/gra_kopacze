@@ -25,7 +25,7 @@ public class Constants {
    public static final int SWAP = 2;
    public static final int SLOW_TARGET = 3;
    public static final int DIG_FLAT = 4;
-   public static final int DIF_PC = 5;
+   public static final int DIG_PC = 5;
    public static final int SPEED_BOOST = 6;
    public static final int CHANGE_STATE = 7;
    
